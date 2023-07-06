@@ -1,7 +1,6 @@
 package com.example.myapplication.room.cipher
 
 import android.content.Context
-import android.util.Base64
 import android.util.Log
 import com.example.myapplication.DB_NAME
 import java.io.File
@@ -28,7 +27,7 @@ fun getDatabaseState(dbPath: File): CipherState? {
     return CipherState.DOES_NOT_EXIST
 }
 
-fun prepareAndEncryptDatabase(context: Context, passphrase: String, enabledEncryption: Boolean){
+fun prepareAndEncryptDatabase(context: Context, passphrase: ByteArray?, enabledEncryption: Boolean){
     SQLiteDatabase.loadLibs(context)
     val dbPath = context.getDatabasePath(DB_NAME)
     val state: CipherState? = getDatabaseState(dbPath)
@@ -36,7 +35,7 @@ fun prepareAndEncryptDatabase(context: Context, passphrase: String, enabledEncry
         encryptDatabase(
             context = context,
             originalFile = dbPath,
-            passphrase = Base64.decode(passphrase, Base64.DEFAULT)
+            passphrase = passphrase
         )
     }
     Log.e("AppDatabase", "state: $state", )

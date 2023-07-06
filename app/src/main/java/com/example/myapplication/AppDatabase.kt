@@ -20,14 +20,14 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
 
         fun getInstance(context: Context, enabledEncryption: Boolean): AppDatabase{
-            val passphrase = "PassPhrase"
+            val passphrase = Base64.decode("Passphraze", Base64.DEFAULT)
 
             prepareAndEncryptDatabase(
                 context = context,
                 passphrase = passphrase,
                 enabledEncryption = enabledEncryption
             )
-            val factory = SafeHelperFactory(Base64.decode(passphrase, Base64.DEFAULT))
+            val factory = SafeHelperFactory(passphrase)
 
             val databaseBuilder = Room
                 .databaseBuilder(context, AppDatabase::class.java, DB_NAME)
@@ -39,12 +39,6 @@ abstract class AppDatabase : RoomDatabase() {
 
             return databaseBuilder.build()
         }
-
-
-
-
-
-
 
     }
 }
